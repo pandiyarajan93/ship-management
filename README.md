@@ -23,8 +23,8 @@ Sort by name,code,length,width
 URL's
 Front end: http://localhost:4200
 Back end : http://localhost:9090
-Swagger: http://localhost/swagger-ui/#/
-Actuator:http://localhost/actuator
+Swagger: http://localhost:9090/swagger-ui/#/
+Actuator:http://localhost:9090/actuator
 
 To start application use below command in command prompt
 app>npm start 
