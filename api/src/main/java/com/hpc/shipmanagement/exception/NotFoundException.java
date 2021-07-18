@@ -1,10 +1,6 @@
 package com.hpc.shipmanagement.exception;
 
-import com.hpc.shipmanagement.service.ShipService;
-
-import java.util.function.Supplier;
-
-public class NotFoundException extends Exception  {
+public class NotFoundException extends RuntimeException  {
     public NotFoundException(String message) {
         super(message);
     }

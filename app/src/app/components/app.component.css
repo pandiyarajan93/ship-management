@@ -1,0 +1,40 @@
+.header img {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: #555;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.toolbar {
+  display: flex;
+  width: 100%;
+}
+
+.header-text {
+  font-weight: bold;
+  position: relative;
+  margin-left: 60px;
+  font-size: 25px;
+  position: absolute;
+}
+
+mat-toolbar {
+  background: rgb(32, 178, 170) !important;
+  color: rgb(255, 255, 255);
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: lightseagreen;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  padding: 10px;
+  user-select: none;
+}

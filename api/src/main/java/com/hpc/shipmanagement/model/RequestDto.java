@@ -1,9 +1,11 @@
 package com.hpc.shipmanagement.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
@@ -11,11 +13,13 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class RequestDto {
 
+    private Long id;
+
+    @NotNull(message="code should not be empty")
+    private String code;
+
     @NotNull(message = "name should not be empty")
     private String name;
-
-    @Pattern(message = "code format should be valid", regexp = "^[a-zA-z]{4}-[0-9]{4}-[a-zA-z]{1}[0-9]{1}$")
-    private String code;
 
     private double length;
 

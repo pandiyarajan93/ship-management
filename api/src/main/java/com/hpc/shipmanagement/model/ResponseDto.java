@@ -13,9 +13,9 @@ public class ResponseDto {
 
     private long id;
 
-    private String name;
-
     private String code;
+
+    private String name;
 
     private double length;
 

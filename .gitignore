@@ -1,0 +1,17 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/app/dist
+
+# dependencies
+/app/node_modules
+
+
+# IDEs and editors
+/api/.idea
+/api/.project
+/api/.classpath
+
+# IDE - VSCode
+/app/.vscode/*
+

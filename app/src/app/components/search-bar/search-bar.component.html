@@ -1,0 +1,10 @@
+<div>
+  <input placeholder="Search by name or code" #input autofocus />
+  <button (click)="filter(input.value)">
+    <mat-icon>search</mat-icon><span> Search</span>
+  </button>
+  <button (click)="input.value = ''; filter('')">
+    <mat-icon>close</mat-icon>
+    <span> Reset </span>
+  </button>
+</div>

@@ -1,54 +1,122 @@
 package com.hpc.shipmanagement.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hpc.shipmanagement.entity.Ship;
-import org.junit.jupiter.api.BeforeAll;
+import com.hpc.shipmanagement.exception.NotFoundException;
+import com.hpc.shipmanagement.repository.ShipRespository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.Assert;
-import org.springframework.web.context.WebApplicationContext;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 public class ShipServiceTest {
 
+    @InjectMocks
+    private ShipServiceImpl shipService;
+
     @Mock
-    private MockMvc mockMvc;
+    private ShipRespository shipRespository;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @Test
+    public void should_create_ship(){
+        Ship ship = Ship.builder().name("test1")
+                .code("aaaa-1111-a1").length(12.2).width(23d).build();
 
-    @Autowired
-    ObjectMapper objectMapper;
+        when(shipRespository.save(ship)).thenReturn(ship);
 
-    @BeforeAll
-    public void setUp(){
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        Assertions.assertEquals(shipRespository.save(ship),ship);
+
+        Mockito.verify(shipRespository).save(ship);
     }
 
     @Test
-    public void should_create_new_ship() throws Exception {
-        Ship ship  = mockData();
-        mockMvc.perform(post("/ship/save")
-                .content(objectMapper.writeValueAsString(ship))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+    public void should_update_ship(){
+        Ship ship = Ship.builder().id(1).name("test1")
+                .code("aaaa-1111-a1").length(12.2).width(23d).build();
+
+
+        when(shipRespository.findById(1L)).thenReturn(Optional.of(ship));
+        Ship ship1 = shipService.findById(1L);
+
+        Ship ship2 = Ship.builder().id(ship1.getId()).name("Ship1").code("aaaa-1111-a1")
+                .length(12.2).width(23d).build();
+        when(shipRespository.save(ship2)).thenReturn(ship2);
+
+        Assertions.assertEquals(shipRespository.save(ship2),ship2);
+
+        Mockito.verify(shipRespository).save(ship2);
     }
-    
-    public Ship mockData(){
-        Ship ship = new Ship();
-        ship.setId(1L);
-        ship.setShipName("ship1");
-        ship.setCode(String.format("AAAA-1111-A1"));
-        ship.setLength(12.4);
-        ship.setWidth(10.4);
-        return ship;
+
+    @Test
+    public void should_delete_ship(){
+        Ship ship = Ship.builder().id(1).name("test1")
+                .code("aaaa-1111-a1").length(12.2).width(23d).build();
+
+        when(shipRespository.findById(1L)).thenReturn(Optional.of(ship));
+        Ship ship1 = shipService.findById(1L);
+        shipRespository.deleteById(ship1.getId());
+
+        verify(shipRespository).deleteById(ship1.getId());
+
     }
+
+    @Test
+    public void should_fetch_ship() {
+        List<Ship> ships = mockShipData();
+
+        assertThat(ships).hasSize(1);
+        assertThat(ships.get(0).getName()).isEqualTo("Ship1");
+    }
+
+
+    @Test
+    public void should_fetch_ship_byId() throws NotFoundException {
+        Ship response = Ship.builder()
+                .name("ship1").code("AAAA-1111-A1").length(9.5d).width(5).build();
+
+        when(shipRespository.findById(1L)).thenReturn(Optional.of(response));
+
+        Ship ship = shipService.findById(1L);
+
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(ship.getName()).isEqualTo("ship1");
+            softAssertions.assertThat(ship.getCode()).isEqualTo("AAAA-1111-A1");
+            softAssertions.assertThat(ship.getLength()).isEqualTo(9.5d);
+            softAssertions.assertThat(ship.getWidth()).isEqualTo(5);
+        });
+    }
+
+    @Test
+    void should_throw_exception_when_id_notFound() {
+        doThrow(new NotFoundException("Id not found")).when(shipRespository).findById(1L);
+
+        assertThatThrownBy(() ->
+                shipService.findById(1L)).isInstanceOf(NotFoundException.class)
+                .hasMessage("Id not found");
+    }
+
+    private List<Ship> mockShipData() {
+        List<Ship> lst = new ArrayList<>();
+        Ship ship = Ship.builder()
+                .name("Ship1")
+                .code("AAAA-1111-A1")
+                .length(10.4)
+                .width(10)
+                .build();
+        lst.add(ship);
+        return lst;
+    }
+
 }
