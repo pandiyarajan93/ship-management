@@ -18,19 +18,19 @@ export class ShipService {
     return this.handleApiRequest(this.http.get<Ship[]>(`${this.api}/fetch`));
   }
 
-  public createShips(ship: Ship): Observable<Ship> {
+  public createShip(ship: Ship): Observable<Ship> {
     return this.handleApiRequest(
       this.http.post<Ship>(`${this.api}/save`, ship)
     );
   }
 
-  public updateShips(ship: Ship): Observable<Ship> {
+  public updateShip(ship: Ship): Observable<Ship> {
     return this.handleApiRequest(
       this.http.put<Ship>(`${this.api}/update/${ship.id}`, ship)
     );
   }
 
-  public deleteShips(id: number) {
+  public deleteShip(id: number) {
     return this.handleApiRequest(this.http.delete(`${this.api}/delete/${id}`));
   }
 
@@ -40,12 +40,10 @@ export class ShipService {
 
   handleApiRequest(request: any): any {
     return request.pipe(
-      catchError((err: Error, _) => {
-        this.snackBar.open('Alert', err.message, {
-          duration: 3000,
-        });
-
-        throw new Error(err.message);
+      catchError((ex: any) => {
+        this.snackBar.open('Alert', ex.error.errorMessage);
+        duration : 3000;
+        throw new Error(ex.error.errorMessage);
       })
     );
   }

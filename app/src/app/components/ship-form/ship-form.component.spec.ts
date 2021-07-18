@@ -1,21 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ShipFormComponent } from './ship-form.component';
 
-describe('NewShipComponent', () => {
+describe('ShipFormComponent', () => {
   let component: ShipFormComponent;
   let fixture: ComponentFixture<ShipFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShipFormComponent ],
+      declarations: [ShipFormComponent],
       imports: [
         MatFormFieldModule,
         ReactiveFormsModule,
@@ -27,15 +30,15 @@ describe('NewShipComponent', () => {
         {
           provide: MatDialogRef,
           useValue: {
-            id: 1
+            id: 1,
           },
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: {}
-        }]
-    })
-    .compileComponents();
+          useValue: {},
+        },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -47,15 +50,6 @@ describe('NewShipComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should not submit when form is not valid', async(() => {
-    component.shipForm.controls['name'].setValue('');
-    component.shipForm.controls['code'].setValue('');
-    expect(component.shipForm.valid).toBeFalsy();
-
-    fixture.detectChanges();
-    let btn = fixture.debugElement.nativeElement.querySelector('#submit');
-    expect(btn.disabled).toBeTruthy();
-  }));
 
   it('should not disable submit button when form is valid', async(() => {
     component.shipForm.controls['name'].setValue('test');

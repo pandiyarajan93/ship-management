@@ -14,11 +14,17 @@ th.mat-sort-header-sorted {
   padding: 0 !important;
 }
 
-thead {
-  /* background: #df5151 !important; */
+.mat-simple-snackbar-action .mat-button-wrapper {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 thead th {
-  /* color: rgb(255, 255, 255) !important; */
   font-size: 15px !important;
+}
+
+.mat-simple-snackbar > span {
+  color: rgb(39, 218, 209);
+  font-weight: bold;
+  font-size: 15px;
+  font-family: sans-serif;
 }

@@ -19,6 +19,9 @@ export class ShipDetailsComponent implements OnInit {
   data: Ship[] = [];
   filteredData?: Ship[];
 
+  pageSize = 5;
+  pageIndex = 0;
+
   @ViewChild(MatPaginator)
   paginator: any = {};
 
@@ -35,14 +38,12 @@ export class ShipDetailsComponent implements OnInit {
       this.data = data;
       this.dataSource = new MatTableDataSource(data);
 
-      this.updatePagination();
 
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sortData;
     });
   }
 
-  updatePagination(): void {}
 
   createOrUpdate(data?: Ship): void {
     const dialogRef = this.dialog.open(ShipFormComponent, {
@@ -61,7 +62,6 @@ export class ShipDetailsComponent implements OnInit {
         this.addShip(result);
       }
 
-      this.updatePagination();
     });
   }
 
@@ -72,16 +72,15 @@ export class ShipDetailsComponent implements OnInit {
   }
 
   addShip(data: Ship): void {
-    this.shipService.createShips(data).subscribe((res: Ship) => {
+    this.shipService.createShip(data).subscribe((res: Ship) => {
       this.data.push(res);
-      this.dataSource = new MatTableDataSource(this.data);
-
+      this.handlePage();
       this.showAlert('Created Sucessfully');
     });
   }
 
   updateShip(data: Ship): void {
-    this.shipService.updateShips(data).subscribe((res: Ship) => {
+    this.shipService.updateShip(data).subscribe((res: Ship) => {
       const replaceIndex = this.data?.findIndex((x) => x.id == res.id);
       if (replaceIndex > -1 && replaceIndex < this.data.length)
         this.data[replaceIndex] = res;
@@ -92,12 +91,24 @@ export class ShipDetailsComponent implements OnInit {
   }
 
   delete(id: number) {
-    if(confirm('Are you sure want to delette')){
-      this.shipService.deleteShips(id).subscribe();
-      this.showAlert('Deleted Successfully');
+    if(confirm('Are you sure want to delete')){
+      this.shipService.deleteShip(id).subscribe(() =>{
+        this.data = [...this.data.filter((x:Ship)=>x.id!==id)];
+      });
       this.dataSource = this.data;
+      this.showAlert('Deleted Successfully');
     }
     
+  }
+
+  public handlePage(e?: any): void {
+    const currentPage = e?.pageIndex || this.pageIndex;
+    this.pageSize = e?.pageSize || this.pageSize;
+ 
+    const end = (currentPage + 1) * this.pageSize;
+    const start = currentPage * this.pageSize;
+    const data = this.data.slice(start, end);
+    this.dataSource = data;
   }
 
   filter(searchTxt: any): void {
@@ -112,7 +123,4 @@ export class ShipDetailsComponent implements OnInit {
     );
     this.dataSource.data = this.filteredData;
   }
-}
-function ship(ship: any) {
-  throw new Error('Function not implemented.');
 }

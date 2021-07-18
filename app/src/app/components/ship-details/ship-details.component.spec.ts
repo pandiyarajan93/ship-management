@@ -9,6 +9,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { ShipDetailsComponent } from './ship-details.component';
 import { of } from 'rxjs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ShipDetailsComponent', () => {
   let component: ShipDetailsComponent;
@@ -18,25 +20,27 @@ describe('ShipDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ShipDetailsComponent],
       imports: [
+        BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientModule,
         MatDialogModule,
         MatIconModule,
-        MatTableModule
+        MatTableModule,
+        MatSnackBarModule,
       ],
-      providers: [ShipService]
-    })
-      .compileComponents();
+      providers: [ShipService],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ShipDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    const ship: Ship []= [{ name: 'test', code: 'xxx-xxx-x0', length: 0.1, width: 0.2 }];
+    const ship: Ship[] = [
+      { name: 'test', code: 'xxx-xxx-x0', length: 0.1, width: 0.2 },
+    ];
 
-    spyOn(component['shipService'], 'getShips')
-      .and.callFake(() => of(ship));
+    spyOn(component['shipService'], 'getShips').and.callFake(() => of(ship));
   });
 
   it('should open ship form dialog', () => {
@@ -51,25 +55,28 @@ describe('ShipDetailsComponent', () => {
     expect(component['dialog'].open).toHaveBeenCalled();
   });
 
-
-
   it('should create', () => {
-    const ship: Ship = { name: 'test', code: 'xxx-xxx-x0', length: 0.1, width: 0.2 };
+    const ship: Ship = {
+      name: 'test',
+      code: 'xxx-xxx-x0',
+      length: 0.1,
+      width: 0.2,
+    };
     spyOn(<any>component['dialog'], 'open').and.returnValue({
       afterClosed() {
         return of(ship);
       },
     });
 
-    spyOn(<any>component['shipService'], 'createShip')
-      .and.callFake(() => of(ship));
+    spyOn(<any>component['shipService'], 'createShip').and.callFake(() =>
+      of(ship)
+    );
 
-    const icon = fixture.debugElement.nativeElement.querySelector('#create-ship-icon');
+    const icon =
+      fixture.debugElement.nativeElement.querySelector('#create-ship');
     icon.click();
 
     expect(<any>component['dialog'].open).toHaveBeenCalled();
-    expect(<any>component['shipService'].createShips).toHaveBeenCalled();
-    expect(component).toBeTruthy();
+    expect(<any>component['shipService'].createShip).toHaveBeenCalled();
   });
-
 });
