@@ -1,30 +1,38 @@
-# ship-management
+# Ship Management 
 
-The application scope is about Ship Management features
+Scope of the application is to maintain Ship details.
 
-/app folder respective for front end 
-/api folder respective for back end
+## Description
 
-Technology 
-Front End : Angular 
-Back End : Spring boot
-Database : H2
+The application will have both front end and backend.
+Fronend respective path -> /app
+Backend respective path -> /api
 
-Features
+## Getting Started
 
-Create ship information 
-Read ship information 
-Update ship information 
-Delete ship information  
+### Features
+*Create  Ship details.
+*Read Ship details.
+*Update Ship details.
+*Delete Ship details.
+*Search Ship details
 
-Search by name and ship code
-Sort by name,code,length,width 
+### Technology
+*Front end : Angular
+*Back end : Java,Spring boot
+*Database : h2
 
-URL's
-Front end: http://localhost:4200
-Back end : http://localhost:9090
-Swagger: http://localhost:9090/swagger-ui/#/
-Actuator:http://localhost:9090/actuator
+## Backend Dependencies to pull
+api>mvn clean install
 
-To start application use below command in command prompt
-app>npm start 
+## Run unit test
+api> mvn test
+
+## Run integration test
+api> mvn inegration-test
+
+## Start application
+app> npm start
+
+## Run front end unit test
+app> ng test
