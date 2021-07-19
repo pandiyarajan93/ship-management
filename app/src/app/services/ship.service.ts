@@ -41,8 +41,9 @@ export class ShipService {
   handleApiRequest(request: any): any {
     return request.pipe(
       catchError((ex: any) => {
-        this.snackBar.open('Alert', ex.error.errorMessage);
-        duration : 3000;
+        this.snackBar.open('Alert', ex.error.errorMessage,{
+          duration : 3000,
+        });
         throw new Error(ex.error.errorMessage);
       })
     );

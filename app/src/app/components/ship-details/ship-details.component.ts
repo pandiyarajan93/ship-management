@@ -85,18 +85,20 @@ export class ShipDetailsComponent implements OnInit {
       if (replaceIndex > -1 && replaceIndex < this.data.length)
         this.data[replaceIndex] = res;
 
-      this.dataSource = this.data;
+      this.dataSource.data = this.data;
       this.showAlert('Updated Sucessfully');
     });
   }
 
   delete(id: number) {
     if(confirm('Are you sure want to delete')){
+     
       this.shipService.deleteShip(id).subscribe(() =>{
         this.data = [...this.data.filter((x:Ship)=>x.id!==id)];
+        this.dataSource = this.data;
+        this.showAlert('Deleted Successfully');
       });
-      this.dataSource = this.data;
-      this.showAlert('Deleted Successfully');
+      
     }
     
   }
