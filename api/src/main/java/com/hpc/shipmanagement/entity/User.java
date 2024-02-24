@@ -1,32 +1,29 @@
 package com.hpc.shipmanagement.entity;
 
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+//import javax.persistence.Entity;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Ship {
+@NoArgsConstructor
+public class User implements Serializable {
 
     @Id
     @GeneratedValue
-    private long id;
-
-    @Column(unique = true)
-    private String code;
-    @Column(unique = true)
+    private int id;
     private String name;
-    private double length;
-    private double width;
+    private String password;
+    private String role;
+
 }
